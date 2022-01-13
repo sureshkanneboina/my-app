@@ -1,6 +1,6 @@
 node{
    stage('SCM Checkout'){
-     git 'https://github.com/damodaranj/my-app.git'
+     git 'https://github.com/sureshkanneboina/my-app'
    }
    stage('Compile-Package'){
 
@@ -15,18 +15,18 @@ node{
 	        }
 	    }
    stage('Build Docker Imager'){
-   sh 'docker build -t saidamo/myweb:0.0.2 .'
+   sh 'docker build -t sureshkanneboina/myweb:0.0.2 .'
    }
    stage('Docker Image Push'){
    withCredentials([string(credentialsId: 'dockerPass', variable: 'dockerPassword')]) {
-   sh "docker login -u saidamo -p ${dockerPassword}"
+   sh "docker login -u sureshkanneboina -p ${dockerPassword}"
     }
-   sh 'docker push saidamo/myweb:0.0.2'
+   sh 'docker push sureshkanneboina/myweb:0.0.2'
    }
    stage('Nexus Image Push'){
-   sh "docker login -u admin -p admin123 65.1.108.217:8083"
-   sh "docker tag saidamo/myweb:0.0.2 65.1.108.217:8083/damo:1.0.0"
-   sh 'docker push 65.1.108.217:8083/damo:1.0.0'
+   sh "docker login -u admin -p admin123 13.235.24.172:8085"
+   sh "docker tag sureshkanneboina/myweb:0.0.2 13.235.24.172:8085/suresh:1.0.0"
+   sh 'docker push 13.235.24.172:8085/suresh:1.0.0'
    }
    stage('Remove Previous Container'){
 	try{
@@ -34,9 +34,8 @@ node{
 	}catch(error){
 		//  do nothing if there is an exception
 	}
-   stage('Docker deployment'){
-   sh 'docker run -d -p 8090:8080 --name tomcattest saidamo/myweb:0.0.2' 
+  stage('Docker deployment'){
+   sh 'docker run -d -p 8090:8080 --name tomcattest sureshkanneboina/myweb:0.0.2' 
    }
+ }
 }
-}
-
